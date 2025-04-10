@@ -1,17 +1,9 @@
-import './App.css'
-import AnimationBar from './components/animationBar'
-import Mainbar from './components/mainbar'
-import Sidebar from './components/sidebar'
+import MainPage from './pages/main-page'
 
 function App() {
-
   return (
     <>
-      <div className="grid-background"></div>
-      
-      <Sidebar />
-      <Mainbar />
-      <AnimationBar />
+      <MainPage/>
     </>
   )
 }
