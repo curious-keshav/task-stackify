@@ -1,6 +1,13 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
-const MoveAtCoordinates = () => {
+const MoveAtCoordinates = ({ x = 0, y = 0, onChange }) => {
+
+    const [pos, setPos] = useState({ x, y });
+
+    useEffect(() => {
+        onChange?.(pos);
+    }, [pos]);
+
     return (
         <div className="bg-rose-500 px-4 py-3 rounded-xl font-medium space-y-3">
             <div className="flex flex-col items-center gap-2">
@@ -10,7 +17,8 @@ const MoveAtCoordinates = () => {
                     <span className="text-sm text-white ">X   :</span>
                     <input
                         type="number"
-                        defaultValue={4}
+                        value={pos.x}
+                        onChange={(e) => setPos((p) => ({ ...p, x: Number(e.target.value) }))}
                         className="h-8 w-24 rounded-lg px-3 text-sm bg-gray-800 text-white"
                     />
                 </div>
@@ -19,7 +27,8 @@ const MoveAtCoordinates = () => {
                     <span className="text-sm text-white">Y   :</span>
                     <input
                         type="number"
-                        defaultValue={9}
+                        value={pos.y}
+                        onChange={(e) => setPos((p) => ({ ...p, y: Number(e.target.value) }))}
                         className="h-8 w-24 rounded-lg px-3 text-sm bg-gray-800 text-white"
                     />
                 </div>
