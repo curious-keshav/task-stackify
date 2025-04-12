@@ -1,22 +1,15 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import CatSprite from '../assets/CatSprite';
 
-const PreviewArea = ({ position, onPositionChange, message, isThinking }) => {
+const PreviewArea = ({ sprites, onPositionChange, tooltipMessages, onSpriteClick, selectedSpriteId }) => {
 
   const previewRef = useRef(null);
-  const [isOpen, setIsOpen] = useState(false);
 
-
-  const handleDragStart = (e) => {
+  const handleDragStart = (e, sprite) => {
     const rect = previewRef.current.getBoundingClientRect();
-
-    const offsetX = e.clientX - rect.left - position.x;
-    const offsetY = e.clientY - rect.top - position.y;
-
-    console.log(position.y, "kesh")
-
-
-    e.dataTransfer.setData("text/plain", JSON.stringify({ offsetX, offsetY }));
+    const offsetX = e.clientX - rect.left - sprite.position.x;
+    const offsetY = e.clientY - rect.top - sprite.position.y;
+    e.dataTransfer.setData("text/plain", JSON.stringify({ id: sprite.id, offsetX, offsetY }));
   }
 
   const handleDrop = (e) => {
@@ -24,9 +17,7 @@ const PreviewArea = ({ position, onPositionChange, message, isThinking }) => {
     const rect = previewRef.current.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
-
-
-    const { offsetX, offsetY } = JSON.parse(e.dataTransfer.getData("text/plain"));
+    const { id, offsetX, offsetY } = JSON.parse(e.dataTransfer.getData("text/plain"));
 
     let newX = mouseX - offsetX;
     let newY = mouseY - offsetY;
@@ -36,95 +27,69 @@ const PreviewArea = ({ position, onPositionChange, message, isThinking }) => {
 
     newX = Math.max(0, Math.min(newX, maxX));
     newY = Math.max(0, Math.min(newY, maxY));
-    onPositionChange?.({ x: newX, y: newY });
+    onPositionChange?.(id, { x: newX, y: newY });
   };
-
-
-  const options = ["Cat", "Ball"]
 
 
   return (
     <>
-      {/* Grid Background */}
       <div className=" grid-background fixed inset-0 -z-10" />
-
-
       <div className="relative w-full flex flex-col h-full overflow-y-auto text-muted-foreground">
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4  shadow-sm border-b">
-          <h3 className="text-2xl font-bold tracking-wide">Preview Playground</h3>
-          <div className="relative inline-block text-left">
-            <button
-              className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition"
-              onClick={() => setIsOpen(!isOpen)}
+
+        <div
+          className="relative h-full p-2 w-full overflow-hidden"
+          ref={previewRef}
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={handleDrop}>
+          {sprites.map((sprite) => (
+            <div
+              key={sprite.id}
+              onClick={() => onSpriteClick?.(sprite.id)}
+              draggable
+              onDragStart={(e) => handleDragStart(e, sprite)}
+              style={{
+                position: "absolute",
+                left: `${sprite.position.x}px`,
+                top: `${sprite.position.y}px`,
+                cursor: "grab",
+                width: "95px",
+                height: "100px",
+                transition: "left 0.3s ease, top 0.3s ease",
+                selectedSpriteId,
+                filter: sprite.id === selectedSpriteId ? "drop-shadow(0 0 6px rgba(234, 179, 8, 0.8))" : " ",
+              }}
+              className={`${sprite.id === selectedSpriteId ? "drop-shadow-lg" : ""}`}
             >
-              + Create Character
-            </button>
-
-            {isOpen && (
-              <div className="absolute  w-[9.5rem]  ring-opacity-5 z-10 ">
-                <div className="py-1 ">
-                  {options.map((option, index) => (
-                    <button
-                      key={index}
-                      onClick={() => {
-                        console.log("Selected:", option);
-                        setIsOpen(false); // close dropdown
-                      }}
-                      className="w-full text-left px-4 py-2 text-sm text-muted mt-1 bg-muted-foreground hover:bg-gray-100"
-                    >
-                      {option}
-                    </button>
-                  ))}
+              {tooltipMessages?.[sprite.id] && (
+                <div className="absolute -top-6 left-full ml-2 bg-white border px-2 py-1 rounded shadow text-sm max-w-[150px]">
+                  {tooltipMessages[sprite.id]}
                 </div>
+              )}
+              {sprite?.component}
+              <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs bg-white border px-2 py-1 rounded shadow whitespace-nowrap">
+                {sprite.name}
               </div>
-            )}
-          </div>
-        </div>
+            </div>
+          ))}
 
-        {/* Content Area */}
-        <div className="relative h-full p-2 w-full overflow-hidden" ref={previewRef} onDragOver={(e) => e.preventDefault()} onDrop={handleDrop}>
-          <div
-            draggable
-            onDragStart={handleDragStart}
-            style={{
-              position: "absolute",
-              left: `${position.x}px`,
-              top: `${position.y}px`,
-              rotate: `${position.angle}rad`,
-              cursor: "grab",
-              width: "95px",
-              height: "100px",
-              backgroundColor: "transparent",
-              transition: "left 0.3s ease, top 0.3s ease",
-            }}
-          >
-            <CatSprite />
-
-            {isThinking && message && <div className="">
-              <div className="absolute top-1 right-2 h-3 w-3 rounded-full bg-muted-foreground"></div>
-              <div className="absolute -top-3 -right-0 h-3 w-3 rounded-full bg-muted-foreground"></div>
-              <div className="absolute top-[-3.5rem] -right-12 -rotate-6 z-0 h-10 w-fit px-4 rounded-full bg-muted-foreground flex items-center justify-center">
-                <span className="z-10 text-xs text-black">{message}</span>
-              </div>
-            </div>}
-
-            <div className='text-muted-foreground/50 absolute -bottom-6 right-10'>Cat1</div>
-          </div>
         </div>
 
         <div className='absolute bottom-5 right-5'>
           <div className="bg-muted-foreground/30 p-4 rounded-xl text-white shadow-md flex flex-col justify-between w-fit border-2 border-muted-foreground">
             <h3 className="text-lg font-semibold tracking-wide">Character Position</h3>
-            <div className="text-sm text-gray-300 space-y-1 mt-2">
-              <div>
-                <span className="font-medium text-blue-400">Cat1:</span>
-                <span className="ml-2">
-                  X: <span className="text-white font-semibold">{position.x}</span>,
-                  Y: <span className="text-white font-semibold">{position.y}</span>
-                </span>
-              </div>
-            </div>
+            {sprites.length>0 ? sprites?.map((sprite) => {
+              return (
+                <div key={sprite?.id} className="text-sm text-gray-300 space-y-1 mt-2">
+                  <div className='flex justify-between'>
+                    <h3 className="font-medium text-blue-400 inline-block">{sprite?.name}</h3>
+                    <span className="ml-2">
+                      X: <span className="text-white font-semibold">{sprite?.position?.x}</span>,
+                      Y: <span className="text-white font-semibold">{sprite?.position?.y}</span>
+                    </span>
+                  </div>
+                </div>
+              )
+            }) : <div className='text-sm text-muted-foreground mt-2 text-center'>- Add Character First -</div>}
           </div>
         </div>
 

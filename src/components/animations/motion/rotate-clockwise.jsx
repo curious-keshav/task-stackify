@@ -5,7 +5,6 @@ const RotateClockwise = ({ degrees = 15, onChange }) => {
     const [angle, setAngle] = useState(degrees);
 
     useEffect(() => {
-        console.log(angle)
         onChange({ degrees: angle });
     }, [angle]);
 

@@ -1,10 +1,5 @@
 import React from 'react';
 import RotateRightIcon from '@mui/icons-material/RotateRight';
-import SayMessage from './animations/looks/say-message';
-import SayMessageForSeconds from './animations/looks/say-message-for-seconds';
-import ThinkMessage from './animations/looks/thing-message';
-import ThinkMessageForSeconds from './animations/looks/think-message-for-seconds';
-import RepeatAction from './animations/motion/repeat-action';
 import { COMPONENTS } from '../utility/components';
 
 

@@ -16,7 +16,6 @@ const MOVE_Y = ({ value = 10, onChange }) => {
         type="number"
         value={step}
         onChange={(e) => setStep(Number(e.target.value))}
-        defaultValue={4}
         className="h-8 w-24 rounded-lg px-3 text-sm bg-gray-800 text-white"
       />
       <span className="text-sm text-white">steps</span>
