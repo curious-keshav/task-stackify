@@ -5,7 +5,8 @@ const RotateClockwise = ({ degrees = 15, onChange }) => {
     const [angle, setAngle] = useState(degrees);
 
     useEffect(() => {
-        onChange?.({ degrees: angle });
+        console.log(angle)
+        onChange({ degrees: angle });
     }, [angle]);
 
     return (
@@ -14,7 +15,6 @@ const RotateClockwise = ({ degrees = 15, onChange }) => {
                 <div className="text-sm text-white">Rotate <RotateRightIcon /> By</div>
                 <input
                     type="number"
-                    defaultValue={degrees}
                     value={angle}
                     onChange={(e) => setAngle(Number(e.target.value))}
                     className="h-8 w-[6rem] rounded-lg px-3 ml-2 text-sm bg-gray-800 text-white"
@@ -23,7 +23,7 @@ const RotateClockwise = ({ degrees = 15, onChange }) => {
             </div>
             <div className='flex bg-muted/30 shadow-md p-1 rounded-md w-full '>
                 <div className='h-3 w-1 rounded-lg bg-muted-foreground  mr-2'></div>
-                <span className='text-[0.48rem] font-semibold '>Use negative value to Rotate in AntiClockwise Direction</span>
+                <span className='text-[0.48rem] font-semibold '>Use negative value to rotate in AntiClockwise Direction</span>
             </div>
         </div>
     )

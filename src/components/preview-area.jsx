@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import CatSprite from '../assets/CatSprite';
 
-const PreviewArea = ({ position, onPositionChange }) => {
+const PreviewArea = ({ position, onPositionChange, message, isThinking }) => {
 
   const previewRef = useRef(null);
 
@@ -34,11 +34,10 @@ const PreviewArea = ({ position, onPositionChange }) => {
 
     newX = Math.max(0, Math.min(newX, maxX));
     newY = Math.max(0, Math.min(newY, maxY));
-
-
-
     onPositionChange?.({ x: newX, y: newY });
   };
+
+  console.log(position.angle, "kesh")
 
   return (
     <>
@@ -73,6 +72,24 @@ const PreviewArea = ({ position, onPositionChange }) => {
             }}
           >
             <CatSprite />
+
+            {isThinking && message && <div className="">
+              <div className="absolute top-1 right-2 h-3 w-3 rounded-full bg-muted-foreground"></div>
+              <div className="absolute -top-3 -right-0 h-3 w-3 rounded-full bg-muted-foreground"></div>
+              <div className="absolute top-[-3.5rem] -right-12 -rotate-6 z-0 h-10 w-fit px-4 rounded-full bg-muted-foreground flex items-center justify-center">
+                <span className="z-10 text-xs text-black">{message}</span>
+              </div>
+            </div>}
+
+            {!isThinking && message && <div className="">
+              <div className="absolute top-[-3rem] -right-12 z-0 flex-wrap w-24 px-4 rounded-xl bg-muted-foreground flex items-center justify-center">
+                <span className=" relative z-10 text-xs text-black">{message}</span>
+              </div>
+            </div>}
+
+            
+
+            <div className='text-muted-foreground/50 absolute -bottom-6 right-10'>Cat1</div>
           </div>
         </div>
 

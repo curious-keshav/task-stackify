@@ -16,9 +16,10 @@ const SidebarArea = () => {
   };
 
   return (
-    <div className=" text-white min-w-[19rem] p-5 rounded-xl shadow-lg overflow-y-scroll space-y-6">
-      <h2 className="text-4xl text-center font-bold tracking-wide text-muted-foreground">Task Stackify</h2>
-      <hr className="border-gray-600" />
+    <div className=" text-white min-w-[19rem] px-5 rounded-xl shadow-lg overflow-y-scroll space-y-6">
+      <div className='border-b py-4 sticky top-0 bg-[#171717]'>
+        <h2 className="text-4xl text-center font-bold tracking-wide text-muted-foreground sticky">Task Stackify</h2>
+      </div>
 
       {/* Motion Section */}
       <section className='space-y-4'>
@@ -34,6 +35,7 @@ const SidebarArea = () => {
           >
             <span className="text-sm w-20 text-white">Move X</span>
             <input
+              disabled
               type="number"
               defaultValue={0}
 
@@ -50,9 +52,9 @@ const SidebarArea = () => {
           >
             <span className="text-sm w-20 text-white">Move Y</span>
             <input
+              disabled
               type="number"
               defaultValue={0}
-
               className="h-8 w-24 rounded-lg px-3 text-sm bg-gray-800 text-white placeholder:text-gray-400"
             />
             <span className="text-sm text-white">steps</span>
@@ -72,13 +74,14 @@ const SidebarArea = () => {
               <input
                 type="number"
                 defaultValue={0}
+                disabled
                 className="h-8 w-[6rem] rounded-lg px-3 ml-2 text-sm bg-gray-800 text-white"
               />
               <span className="text-sm text-white ml-1">°</span>
             </div>
             <div className='flex bg-muted/30 shadow-md p-1 rounded-md w-full '>
               <div className='h-3 w-1 rounded-lg bg-muted-foreground  mr-2'></div>
-              <span className='text-[0.48rem] font-semibold '>Use negative value to Rotate in AntiClockwise Direction</span>
+              <span className='text-[0.48rem] font-semibold '>Use negative value to rotate in AntiClockwise Direction</span>
             </div>
           </div>
         </div>
@@ -97,6 +100,7 @@ const SidebarArea = () => {
               <input
                 type="number"
                 value={0}
+                disabled
                 className="h-8 w-24 rounded-lg px-3 text-sm bg-gray-800 text-white"
               />
             </div>
@@ -106,6 +110,7 @@ const SidebarArea = () => {
               <input
                 type="number"
                 value={0}
+                disabled
                 className="h-8 w-24 rounded-lg px-3 text-sm bg-gray-800 text-white"
               />
             </div>
@@ -130,13 +135,51 @@ const SidebarArea = () => {
         <h3 className="text-lg font-semibold text-muted-foreground">Looks</h3>
 
         <div className="space-y-2 ">
-          <SayMessage />
-          <SayMessageForSeconds />
+          {/* <SayMessage /> */}
+
+          <div
+            className="flex items-center gap-2 bg-amber-500 px-4 py-3 rounded-xl font-medium"
+            draggable
+            onDragStart={(e) => handleDragStart(e, COMPONENTS.SAY)}
+          >
+            <span className="text-sm  text-white">Say</span>
+            <input
+              type="text"
+              defaultValue="Hi"
+              className="h-8 w-[3.6rem] rounded-lg px-3 text-sm bg-gray-800 text-white placeholder:text-gray-400"
+            />
+            <span className="text-sm text-white"> for </span>
+            <input
+              type="number"
+              defaultValue={0}
+              className="h-8 w-8 rounded-lg px-3 text-sm bg-gray-800 text-white placeholder:text-gray-400"
+            />
+            <span className="text-sm text-white">seconds </span>
+
+          </div>
         </div>
 
         <div className="space-y-2 ">
-          <ThinkMessage />
-          <ThinkMessageForSeconds />
+          <div
+            className="flex items-center gap-2 bg-violet-600 px-4 py-3 rounded-xl font-medium"
+            draggable
+            onDragStart={(e) => handleDragStart(e, COMPONENTS.THINK)}
+          >
+            <span className="text-sm w-20 text-white">Think</span>
+            <input
+              type="text"
+              defaultValue="Hi"
+              className="h-8 w-[3.6rem] rounded-lg px-3 text-sm bg-gray-800 text-white placeholder:text-gray-400"
+            />
+            <span className="text-sm text-white"> for </span>
+            <input
+              type="number"
+              defaultValue={0}
+              className="h-8 w-8 rounded-lg px-3 text-sm bg-gray-800 text-white placeholder:text-gray-400"
+            />
+            <span className="text-sm text-white">seconds </span>
+
+          </div>
         </div>
 
       </section>

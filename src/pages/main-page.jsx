@@ -6,6 +6,8 @@ import SidebarArea from "../components/sidebar-area"
 
 function MainPage() {
   const [spritePosition, setSpritePosition] = useState({ x: 100, y: 100 });
+  const [message, setMessage] = useState("");
+  const [isThinking,setIsThinking] = useState(false);
 
   const runStack = async (blocks) => {
     for (const block of blocks) {
@@ -25,6 +27,18 @@ function MainPage() {
         case "TURN_DEGREES":
           setSpritePosition({ angle : props?.angle ?? 0 });
           await delay(500);
+          break;
+        case "SAY":
+          setMessage(props?.message);
+          await delay((props?.duration || 1) * 1000);
+          setMessage("");
+          break;
+        case "THINK":
+          setIsThinking(true);
+          setMessage(props?.message);
+          await delay((props?.duration || 1) * 1000);
+          setMessage("");
+          setIsThinking(false);
           break;
       }
     }
@@ -46,14 +60,13 @@ function MainPage() {
   return (
     <>
       <div className=" h-screen w-screen flex ">
-        <div className="flex-1 h-full flex gap-2 p-2 rounded-tr-2xl shadow-xl bg-muted/50 border-t border-r border-gray-300 backdrop-blur-md overflow-hidden">
+        <div className="flex-1 h-full flex gap-2 p-2 rounded-tr-2xl shadow-xl bg-muted/50 border-t border-r border-gray-300 backdrop-blur-md n">
           <SidebarArea />
           <MainbarArea onRunStack={runStack} />
         </div>
 
-        {/* Right Side: Preview */}
-        <div className=" w-1/3 h-screen  flex flex-row p-2 rounded-tl-2xl shadow-xl bg-muted/50 border-t border-l border-gray-300 backdrop-blur-md overflow-hidden">
-          <PreviewArea position={spritePosition} onPositionChange={setSpritePosition} />
+        <div className=" w-1/3 h-screen  flex flex-row p-2 rounded-tl-2xl shadow-xl bg-muted/50 border-t border-l border-gray-300 backdrop-blur-md ">
+          <PreviewArea position={spritePosition} onPositionChange={setSpritePosition} isThinking={isThinking} message={message}/>
         </div>
       </div>
     </>
