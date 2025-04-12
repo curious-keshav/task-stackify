@@ -1,9 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import CatSprite from '../assets/CatSprite';
 
 const PreviewArea = ({ position, onPositionChange, message, isThinking }) => {
 
   const previewRef = useRef(null);
+  const [isOpen, setIsOpen] = useState(false);
+
 
   const handleDragStart = (e) => {
     const rect = previewRef.current.getBoundingClientRect();
@@ -37,7 +39,9 @@ const PreviewArea = ({ position, onPositionChange, message, isThinking }) => {
     onPositionChange?.({ x: newX, y: newY });
   };
 
-  console.log(position.angle, "kesh")
+
+  const options = ["Cat", "Ball"]
+
 
   return (
     <>
@@ -49,9 +53,33 @@ const PreviewArea = ({ position, onPositionChange, message, isThinking }) => {
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4  shadow-sm border-b">
           <h3 className="text-2xl font-bold tracking-wide">Preview Playground</h3>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition" onClick={() => { }}>
-            + Create Character
-          </button>
+          <div className="relative inline-block text-left">
+            <button
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              + Create Character
+            </button>
+
+            {isOpen && (
+              <div className="absolute  w-[9.5rem]  ring-opacity-5 z-10 ">
+                <div className="py-1 ">
+                  {options.map((option, index) => (
+                    <button
+                      key={index}
+                      onClick={() => {
+                        console.log("Selected:", option);
+                        setIsOpen(false); // close dropdown
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-muted mt-1 bg-muted-foreground hover:bg-gray-100"
+                    >
+                      {option}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Content Area */}
@@ -80,14 +108,6 @@ const PreviewArea = ({ position, onPositionChange, message, isThinking }) => {
                 <span className="z-10 text-xs text-black">{message}</span>
               </div>
             </div>}
-
-            {!isThinking && message && <div className="">
-              <div className="absolute top-[-3rem] -right-12 z-0 flex-wrap w-24 px-4 rounded-xl bg-muted-foreground flex items-center justify-center">
-                <span className=" relative z-10 text-xs text-black">{message}</span>
-              </div>
-            </div>}
-
-            
 
             <div className='text-muted-foreground/50 absolute -bottom-6 right-10'>Cat1</div>
           </div>

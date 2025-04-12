@@ -25,10 +25,11 @@ function MainPage() {
           await delay(500);
           break;
         case "TURN_DEGREES":
-          setSpritePosition({ angle : props?.angle ?? 0 });
+          setSpritePosition((prev) => ({ ...prev, angle: props?.degrees ?? 0 }));
           await delay(500);
           break;
         case "SAY":
+          setIsThinking(false);
           setMessage(props?.message);
           await delay((props?.duration || 1) * 1000);
           setMessage("");
@@ -66,7 +67,7 @@ function MainPage() {
         </div>
 
         <div className=" w-1/3 h-screen  flex flex-row p-2 rounded-tl-2xl shadow-xl bg-muted/50 border-t border-l border-gray-300 backdrop-blur-md ">
-          <PreviewArea position={spritePosition} onPositionChange={setSpritePosition} isThinking={isThinking} message={message}/>
+          <PreviewArea position={spritePosition} onPositionChange={setSpritePosition} isThinking={isThinking} message={message} />
         </div>
       </div>
     </>
