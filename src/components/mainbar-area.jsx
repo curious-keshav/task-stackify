@@ -7,9 +7,12 @@ import RepeatAction from './animations/motion/repeat-action';
 import SayMessageForSeconds from './animations/looks/say-message-for-seconds';
 import ThinkMessageForSeconds from './animations/looks/think-message-for-seconds';
 import { v4 as uuidv4 } from "uuid";
+import { useSpriteContext } from '../context/SpriteContext';
 
 
-const MainbarArea = ({ sprites, onUpdateStack, onRunStack, runAllStacks, selectedSpriteId, setShowModal }) => {
+const MainbarArea = () => {
+  
+  const { runStack, sprites, selectedSpriteId, setShowModal, runAllStacks, updateSpriteStack } = useSpriteContext();
 
   const spriteRefs = useRef({});
   const [dragInfo, setDragInfo] = useState(null);
@@ -28,7 +31,7 @@ const MainbarArea = ({ sprites, onUpdateStack, onRunStack, runAllStacks, selecte
 
     const newBlock = { id: uuidv4(), type: blockType, props: {} };
     const updatedStack = [...sprites.find((s) => s.id === spriteId).stack, newBlock];
-    onUpdateStack(spriteId, updatedStack);
+    updateSpriteStack(spriteId, updatedStack);
   };
 
   const handleDropReorder = (targetSpriteId, targetIndex) => {
@@ -42,12 +45,12 @@ const MainbarArea = ({ sprites, onUpdateStack, onRunStack, runAllStacks, selecte
 
     if (fromSpriteId === targetSpriteId) {
       sourceStack.splice(targetIndex, 0, draggedBlock);
-      onUpdateStack(fromSpriteId, sourceStack);
+      updateSpriteStack(fromSpriteId, sourceStack);
     } else {
       const targetStack = [...sprites.find((s) => s.id === targetSpriteId).stack];
       targetStack.splice(targetIndex, 0, draggedBlock);
-      onUpdateStack(fromSpriteId, sourceStack);
-      onUpdateStack(targetSpriteId, targetStack);
+      updateSpriteStack(fromSpriteId, sourceStack);
+      updateSpriteStack(targetSpriteId, targetStack);
     }
 
     setDragInfo(null);
@@ -55,7 +58,7 @@ const MainbarArea = ({ sprites, onUpdateStack, onRunStack, runAllStacks, selecte
 
   const handleInputChange = (spriteId, index, updatedProps) => {
     const currentStack = sprites.find((s) => s.id === spriteId).stack;
-    onUpdateStack(
+    updateSpriteStack(
       spriteId,
       currentStack.map((b, i) => (i === index ? { ...b, props: { ...b.props, ...updatedProps } } : b))
     );
@@ -129,7 +132,7 @@ const MainbarArea = ({ sprites, onUpdateStack, onRunStack, runAllStacks, selecte
                 <div className='flex justify-between items-center p-4'>
                   <h2 className='font-semibold text-lg'>{sprite?.name}</h2>
                   <div className='flex gap-2'>
-                    <button className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition" onClick={() => onRunStack(sprite.stack, sprite.id)}>
+                    <button className="bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-700 transition" onClick={() => runStack(sprite.stack, sprite.id)}>
                       Run
                     </button>
                   </div>

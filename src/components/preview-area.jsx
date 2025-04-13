@@ -1,7 +1,9 @@
 import React, { useRef } from 'react';
-import CatSprite from '../assets/CatSprite';
+import { useSpriteContext } from '../context/SpriteContext';
 
-const PreviewArea = ({ sprites, onPositionChange, tooltipMessages, onSpriteClick, selectedSpriteId, isThinking=false }) => {
+const PreviewArea = ({onPositionChange, isThinking=false }) => {
+  
+  const { sprites, selectedSpriteId, tooltipMessages, handleSpriteSelection } = useSpriteContext();
 
   const previewRef = useRef(null);
 
@@ -44,7 +46,7 @@ const PreviewArea = ({ sprites, onPositionChange, tooltipMessages, onSpriteClick
           {sprites.map((sprite) => (
             <div
               key={sprite.id}
-              onClick={() => onSpriteClick?.(sprite.id)}
+              onClick={() => handleSpriteSelection?.(sprite.id)}
               draggable
               onDragStart={(e) => handleDragStart(e, sprite)}
               style={{
