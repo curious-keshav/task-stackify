@@ -113,9 +113,6 @@ const MainbarArea = ({ sprites, onUpdateStack, onRunStack, runAllStacks, selecte
           </div>
         )}
 
-
-
-
         <div className='p-8 grid grid-cols-2 gap-2'>
           {sprites?.map((sprite) => {
             if (!spriteRefs.current[sprite.id]) {

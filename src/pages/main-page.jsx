@@ -14,12 +14,10 @@ function MainPage() {
   const [showModal, setShowModal] = useState(false);
   const [selectedSpriteId, setSelectedSpriteId] = useState(null);
   const [isThinking, setIsThinking] = useState([]);
-  console.log(sprites, "hello")
 
   const runStack = async (blocks, spriteId) => {
     for (const block of blocks) {
       const { type, props } = block;
-      console.log(type, props, "keshav")
 
       switch (type) {
         case "MOVE_X":
