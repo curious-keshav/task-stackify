@@ -13,12 +13,11 @@ function MainPage() {
   const [tooltipMessages, setTooltipMessages] = useState({});
   const [showModal, setShowModal] = useState(false);
   const [selectedSpriteId, setSelectedSpriteId] = useState(null);
-  const [isThinking, setIsThinking] = useState(false);
+  const [isThinking, setIsThinking] = useState([]);
 
   const runStack = async (blocks, spriteId) => {
     for (const block of blocks) {
       const { type, props } = block;
-      console.log(spriteId,"fef");
 
       switch (type) {
         case "MOVE_X":
@@ -37,13 +36,13 @@ function MainPage() {
           break;
 
         case "SAY":
-          setIsThinking(false);
+          setIsThinking((prev) => ({ ...prev, [spriteId]: false }));
           setTooltipMessages((prev) => ({ ...prev, [spriteId]: props?.message }));
           await delay((props?.duration || 1) * 1000);
           setTooltipMessages((prev) => ({ ...prev, [spriteId]: "" }));
           break;
         case "THINK":
-          setIsThinking(true);
+          setIsThinking((prev) => ({ ...prev, [spriteId]: true }));
           setTooltipMessages((prev) => ({ ...prev, [spriteId]: props?.message }));
           await delay((props?.duration || 1) * 1000);
           setTooltipMessages((prev) => ({ ...prev, [spriteId]: "" }));
@@ -57,7 +56,6 @@ function MainPage() {
             await runStack(previousBlocks, spriteId);
           }
           break;
-
       }
     }
   }
@@ -82,7 +80,7 @@ function MainPage() {
         );
 
         if (collided) {
-          console.log("Hero Feature Collision between:", spriteId, collided.id);
+          console.log( spriteId,"Hero Feature Collision between:", collided.id);
           return updatedSprites.map((s) => {
             if (s.id === spriteId) return { ...s, stack: collided.stack };
             if (s.id === collided.id) return { ...s, stack: current.stack };
@@ -185,6 +183,7 @@ function MainPage() {
             tooltipMessages={tooltipMessages}
             onSpriteClick={handleSpriteSelection}
             selectedSpriteId={selectedSpriteId}
+            isThinking={isThinking}
           />
 
         </div>

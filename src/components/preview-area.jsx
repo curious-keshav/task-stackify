@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import CatSprite from '../assets/CatSprite';
 
-const PreviewArea = ({ sprites, onPositionChange, tooltipMessages, onSpriteClick, selectedSpriteId }) => {
+const PreviewArea = ({ sprites, onPositionChange, tooltipMessages, onSpriteClick, selectedSpriteId, isThinking=false }) => {
 
   const previewRef = useRef(null);
 
@@ -60,13 +60,22 @@ const PreviewArea = ({ sprites, onPositionChange, tooltipMessages, onSpriteClick
               }}
               className={`${sprite.id === selectedSpriteId ? "drop-shadow-lg" : ""}`}
             >
-              {tooltipMessages?.[sprite.id] && (
-                <div className="absolute -top-6 left-full ml-2 bg-white border px-2 py-1 rounded shadow text-sm max-w-[150px]">
+              {!isThinking?.[sprite.id] && tooltipMessages?.[sprite.id] && (
+                <div className="absolute -top-6 -right-10 ml-2 bg-white border px-2 py-1 rounded shadow text-sm max-w-[150px]">
                   {tooltipMessages[sprite.id]}
                 </div>
               )}
+              {isThinking?.[sprite.id] && tooltipMessages?.[sprite.id] && (
+                <>
+                <div className='absolute -top-6  -right-1 w-4 h-4 rounded-full bg-muted-foreground/60'></div>
+                <div className='absolute -top-2  right-2 w-4 h-4 rounded-full bg-muted-foreground/60'></div>
+                <div className="absolute -top-16 -right-12 ml-2 bg-muted-foreground text-muted border px-2 py-1 rounded shadow text-sm max-w-[150px]">
+                  {tooltipMessages[sprite.id]}
+                </div>
+                </>
+              )}
               {sprite?.component}
-              <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs bg-white border px-2 py-1 rounded shadow whitespace-nowrap">
+              <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 text-xs bg-muted-foreground/60 text-white border px-2 py-1 rounded shadow whitespace-nowrap">
                 {sprite.name}
               </div>
             </div>
