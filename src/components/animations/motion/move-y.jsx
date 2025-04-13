@@ -10,13 +10,13 @@ const MOVE_Y = ({ value = 10, onChange }) => {
   return (
     <div 
     draggable
-    className="flex items-center justify-between gap-2 bg-blue-600 px-4 py-3 rounded-xl font-medium">
-      <span className="text-sm w-20 text-white">Move Y</span>
+    className="flex items-center justify-center gap-2 bg-blue-600 px-4 py-3 rounded-xl font-medium">
+      <span className="text-sm  text-white">Move Y</span>
       <input
         type="number"
         value={step}
         onChange={(e) => setStep(Number(e.target.value))}
-        className="h-8 w-24 rounded-lg px-3 text-sm bg-gray-800 text-white"
+        className="h-8  rounded-lg px-3 text-sm bg-gray-800 text-white"
       />
       <span className="text-sm text-white">steps</span>
     </div>

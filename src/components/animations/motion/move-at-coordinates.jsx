@@ -10,7 +10,7 @@ const MoveAtCoordinates = ({ x = 0, y = 0, onChange }) => {
 
     return (
         <div className="bg-rose-500 px-4 py-3 rounded-xl font-medium space-y-3">
-            <div className="flex flex-col items-center gap-2">
+            <div className="flex justify-center items-center gap-2">
                 <span className="text-sm font-medium text-white">Move Object At</span>
 
                 <div className="flex items-center gap-2">
@@ -19,7 +19,7 @@ const MoveAtCoordinates = ({ x = 0, y = 0, onChange }) => {
                         type="number"
                         value={pos.x}
                         onChange={(e) => setPos((p) => ({ ...p, x: Number(e.target.value) }))}
-                        className="h-8 w-24 rounded-lg px-3 text-sm bg-gray-800 text-white"
+                        className="h-8 w-36 rounded-lg px-3 text-sm bg-gray-800 text-white"
                     />
                 </div>
 
@@ -29,7 +29,7 @@ const MoveAtCoordinates = ({ x = 0, y = 0, onChange }) => {
                         type="number"
                         value={pos.y}
                         onChange={(e) => setPos((p) => ({ ...p, y: Number(e.target.value) }))}
-                        className="h-8 w-24 rounded-lg px-3 text-sm bg-gray-800 text-white"
+                        className="h-8 w-36 rounded-lg px-3 text-sm bg-gray-800 text-white"
                     />
                 </div>
             </div>

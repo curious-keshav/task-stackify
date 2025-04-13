@@ -116,7 +116,7 @@ const MainbarArea = () => {
           </div>
         )}
 
-        <div className='p-8 grid grid-cols-2 gap-2'>
+        <div className='p-8 grid grid-cols-1 gap-2'>
           {sprites?.map((sprite) => {
             if (!spriteRefs.current[sprite.id]) {
               spriteRefs.current[sprite.id] = React.createRef();
