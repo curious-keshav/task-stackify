@@ -66,28 +66,6 @@ const MainbarArea = ({ sprites, onUpdateStack, onRunStack, runAllStacks, selecte
     e.preventDefault();
   };
 
-  // const handleDrop = (e, stackId) => {
-  //   e.preventDefault();
-  //   const data = e.dataTransfer.getData("text/plain");
-
-  //   setStacks((prevStacks) =>
-  //     prevStacks.map((stack) =>
-  //       stack.id === stackId
-  //         ? {
-  //           ...stack,
-  //           blocks: [
-  //             ...stack.blocks,
-  //             {
-  //               type: data,
-  //               props: {},
-  //             },
-  //           ],
-  //         }
-  //         : stack
-  //     )
-  //   );
-  // };
-
   return (
     <>
       <div className="flex flex-col bg-[#171717] h-full overflow-y-auto text-muted-foreground w-full">

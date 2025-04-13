@@ -18,6 +18,7 @@ function MainPage() {
   const runStack = async (blocks, spriteId) => {
     for (const block of blocks) {
       const { type, props } = block;
+      console.log(spriteId,"fef");
 
       switch (type) {
         case "MOVE_X":
@@ -65,7 +66,7 @@ function MainPage() {
     new Promise((resolve) => {
       setSprites((prev) => {
         const updatedSprites = prev?.map((sprite) => {
-          // if (sprite.id !== spriteId) return sprite;
+          if (sprite.id !== spriteId) return sprite;
           
           const newPos = {
             x: sprite?.position?.x + dx,
