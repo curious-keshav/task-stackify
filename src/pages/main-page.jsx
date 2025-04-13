@@ -32,22 +32,6 @@ function MainPage() {
           setSprites((prev) => prev.map((s) => (s.id === spriteId ? { ...s, position: { x: props?.x ?? 0, y: props?.y ?? 0 } } : s)));
           await delay(500);
           break;
-        case "TURN_DEGREES":
-          // setSprites((prev) =>
-          //   prev.map((s) =>
-          //     s.id === spriteId
-          //       ? {
-          //         ...s,
-          //         angle:
-          //           Number(props?.degree ?? 0) +
-          //           Number(s?.angle ?? 0),
-          //       }
-          //       : s
-          //   )
-          // );
-          setSprites((prev) => prev.map((s) => (s.id === spriteId ? { ...s, angle: props?.degrees ?? 0 } : s)));
-          await delay(500);
-          break;
 
         case "SAY":
           setIsThinking((prev) => ({ ...prev, [spriteId]: false }));
@@ -62,14 +46,41 @@ function MainPage() {
           setTooltipMessages((prev) => ({ ...prev, [spriteId]: "" }));
           break;
 
-        case "REPEAT":
+        case "TURN_DEGREES":
+          setSprites((prev) =>
+            prev.map((s) => {
+              if (s.id === spriteId) {
+                const currentAngle = s.angle || 0;
+                const newAngle = currentAngle + Number(props?.degrees || 0);
+                return { ...s, angle: newAngle };
+              }
+              return s;
+            })
+          );
+          break;
+
+        case "REPEAT": {
           const times = Number(props?.count || 1);
           const currentIndex = blocks.indexOf(block);
           const previousBlocks = blocks.slice(0, currentIndex);
+
           for (let j = 0; j < times; j++) {
             await runStack(previousBlocks, spriteId);
+
+            setSprites((prev) =>
+              prev.map((s) => {
+                if (s.id === spriteId) {
+                  const resetAngle = s.angle || 0;
+                  return { ...s, angle: resetAngle };
+                }
+                return s;
+              })
+            );
+
+            await delay(100);
           }
           break;
+        }
       }
     }
   }
