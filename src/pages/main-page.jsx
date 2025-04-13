@@ -14,24 +14,38 @@ function MainPage() {
   const [showModal, setShowModal] = useState(false);
   const [selectedSpriteId, setSelectedSpriteId] = useState(null);
   const [isThinking, setIsThinking] = useState([]);
+  console.log(sprites, "hello")
 
   const runStack = async (blocks, spriteId) => {
     for (const block of blocks) {
       const { type, props } = block;
+      console.log(type, props, "keshav")
 
       switch (type) {
         case "MOVE_X":
-          await moveBy(spriteId,Number(props?.value || 10), 0);
+          await moveBy(spriteId, Number(props?.value || 10), 0);
           break;
         case "MOVE_Y":
-          await moveBy(spriteId,0, Number(props?.value || 10));
+          await moveBy(spriteId, 0, Number(props?.value || 10));
           break;
         case "GO_TO":
           setSprites((prev) => prev.map((s) => (s.id === spriteId ? { ...s, position: { x: props?.x ?? 0, y: props?.y ?? 0 } } : s)));
           await delay(500);
           break;
         case "TURN_DEGREES":
-          // setSpritePosition((prev) => ({ ...prev, angle: props?.degrees ?? 0 }));
+          // setSprites((prev) =>
+          //   prev.map((s) =>
+          //     s.id === spriteId
+          //       ? {
+          //         ...s,
+          //         angle:
+          //           Number(props?.degree ?? 0) +
+          //           Number(s?.angle ?? 0),
+          //       }
+          //       : s
+          //   )
+          // );
+          setSprites((prev) => prev.map((s) => (s.id === spriteId ? { ...s, angle: props?.degrees ?? 0 } : s)));
           await delay(500);
           break;
 
@@ -65,7 +79,7 @@ function MainPage() {
       setSprites((prev) => {
         const updatedSprites = prev?.map((sprite) => {
           if (sprite.id !== spriteId) return sprite;
-          
+
           const newPos = {
             x: sprite?.position?.x + dx,
             y: sprite?.position?.y + dy,
@@ -80,7 +94,7 @@ function MainPage() {
         );
 
         if (collided) {
-          console.log( spriteId,"Hero Feature Collision between:", collided.id);
+          console.log(spriteId, "Hero Feature Collision between:", collided.id);
           return updatedSprites.map((s) => {
             if (s.id === spriteId) return { ...s, stack: collided.stack };
             if (s.id === collided.id) return { ...s, stack: current.stack };
@@ -159,6 +173,7 @@ function MainPage() {
             onUpdateStack={updateSpriteStack}
             onRunStack={runStack}
             selectedSpriteId={selectedSpriteId}
+            setShowModal={setShowModal}
           />
         </div>
 

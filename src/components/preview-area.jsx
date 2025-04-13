@@ -51,6 +51,7 @@ const PreviewArea = ({ sprites, onPositionChange, tooltipMessages, onSpriteClick
                 position: "absolute",
                 left: `${sprite.position.x}px`,
                 top: `${sprite.position.y}px`,
+                transform: `rotate(${sprite?.angle}deg)`,
                 cursor: "grab",
                 width: "95px",
                 height: "100px",

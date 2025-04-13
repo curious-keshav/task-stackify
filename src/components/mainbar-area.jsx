@@ -9,7 +9,7 @@ import ThinkMessageForSeconds from './animations/looks/think-message-for-seconds
 import { v4 as uuidv4 } from "uuid";
 
 
-const MainbarArea = ({ sprites, onUpdateStack, onRunStack, runAllStacks, selectedSpriteId }) => {
+const MainbarArea = ({ sprites, onUpdateStack, onRunStack, runAllStacks, selectedSpriteId, setShowModal }) => {
 
   const spriteRefs = useRef({});
   const [dragInfo, setDragInfo] = useState(null);
@@ -62,6 +62,7 @@ const MainbarArea = ({ sprites, onUpdateStack, onRunStack, runAllStacks, selecte
   };
 
 
+
   const handleDragOver = (e) => {
     e.preventDefault();
   };
@@ -80,6 +81,39 @@ const MainbarArea = ({ sprites, onUpdateStack, onRunStack, runAllStacks, selecte
             </button>
           </div>
         </div>
+
+        {sprites?.length === 0 && (
+          <div className="p-6 flex justify-center items-center min-h-[60vh]">
+            <div className="bg-muted-foreground/40 p-8 rounded-3xl text-white gap-8 shadow-2xl flex flex-col sm:flex-row justify-center items-center w-full max-w-4xl border-2 border-dashed border-muted-foreground transition-all duration-300">
+
+              <div className="bg-muted rounded-2xl p-4 shadow-inner flex items-center justify-center w-[50%]">
+                <img
+                  src="animation.png"
+                  alt="Create character"
+                  className="h-52 w-52 object-contain"
+                />
+              </div>
+
+              <div className="text-center sm:text-left space-y-4">
+                <h3 className="text-2xl font-bold tracking-tight">
+                  No characters created yet
+                </h3>
+                <p className="text-muted-foreground text-sm">
+                  Get started by creating your first character to play with animations.
+                </p>
+                <button
+                  className="bg-blue-600 w-full text-white px-6 py-3 rounded-xl text-base font-semibold hover:bg-blue-700 transition-all duration-200 shadow-md"
+                  onClick={() => setShowModal(true)}
+                >
+                  + Create Character
+                </button>
+              </div>
+
+            </div>
+          </div>
+        )}
+
+
 
 
         <div className='p-8 grid grid-cols-2 gap-2'>
