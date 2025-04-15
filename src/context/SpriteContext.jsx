@@ -87,7 +87,7 @@ export const SpriteProvider = ({ children }) => {
     const moveBy = (spriteId, dx, dy) =>
         new Promise((resolve) => {
             setSprites((prev) => {
-                const updatedSprites = prev?.map((sprite) => {
+                let updatedSprites = prev?.map((sprite) => {
                     if (sprite.id !== spriteId) return sprite;
 
                     const newPos = {
@@ -100,22 +100,44 @@ export const SpriteProvider = ({ children }) => {
 
                 const current = updatedSprites.find((s) => s.id === spriteId);
                 const collided = updatedSprites.find(
-                    (s) => s.id !== spriteId && Math.abs(s.position.x - current.position.x) < 95 && Math.abs(s.position.y - current.position.y) < 100
+                    (s) =>
+                        s.id !== spriteId &&
+                        Math.abs(s.position.x - current.position.x) < 95 &&
+                        Math.abs(s.position.y - current.position.y) < 100
                 );
 
-                if (collided) {
-                    console.log(spriteId, "Hero Feature Collision between:", collided.id);
-                    return updatedSprites.map((s) => {
-                        if (s.id === spriteId) return { ...s, stack: collided.stack };
-                        if (s.id === collided.id) return { ...s, stack: current.stack };
+                if (
+                    collided &&
+                    current?.hasSwappedWith !== collided.id &&
+                    collided?.hasSwappedWith !== current.id
+                ) {
+                    console.log(spriteId, "Collision swap once between:", collided.id);
+
+                    updatedSprites = updatedSprites.map((s) => {
+                        if (s.id === spriteId)
+                            return {
+                                ...s,
+                                stack: collided.stack.map(b => ({ ...b })), 
+                                hasSwappedWith: collided.id,
+                            };
+                        if (s.id === collided.id)
+                            return {
+                                ...s,
+                                stack: current.stack.map(b => ({ ...b })), 
+                                hasSwappedWith: current.id,
+                            };
                         return s;
                     });
+
                 }
 
                 setTimeout(resolve, 500);
                 return updatedSprites;
             });
         });
+
+
+
 
     const updateSpriteStack = (spriteId, blocks) => {
         setSprites((prev) => prev.map((s) => (s.id === spriteId ? { ...s, stack: blocks } : s)));
@@ -151,7 +173,18 @@ export const SpriteProvider = ({ children }) => {
         ]);
     };
 
+    const resetSwaps = () => {
+        setSprites((prev) =>
+            prev.map((sprite) => ({
+                ...sprite,
+                hasSwappedWith: null,
+            }))
+        );
+    };
+
+
     const runAllStacks = () => {
+        resetSwaps();
         sprites.forEach((sprite) => {
             runStack(sprite.stack, sprite.id);
         });
