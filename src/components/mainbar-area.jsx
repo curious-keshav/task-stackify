@@ -11,7 +11,7 @@ import { useSpriteContext } from '../context/SpriteContext';
 
 
 const MainbarArea = () => {
-  
+
   const { runStack, sprites, selectedSpriteId, setShowModal, runAllStacks, updateSpriteStack } = useSpriteContext();
 
   const spriteRefs = useRef({});
@@ -31,6 +31,14 @@ const MainbarArea = () => {
 
     const newBlock = { id: uuidv4(), type: blockType, props: {} };
     const updatedStack = [...sprites.find((s) => s.id === spriteId).stack, newBlock];
+    updateSpriteStack(spriteId, updatedStack);
+  };
+
+  const handleDeleteButton = (e, spriteId, blockId) => {
+    e.preventDefault();
+    const sprite = sprites.find((s) => s.id === spriteId);
+    if (!sprite) return;
+    const updatedStack = sprite.stack.filter((block) => block.id !== blockId);
     updateSpriteStack(spriteId, updatedStack);
   };
 
@@ -153,13 +161,13 @@ const MainbarArea = () => {
                               onDragOver={(e) => e.preventDefault()}
                               onDrop={() => handleDropReorder(sprite.id, i)}
                             >
-                              {block.type === "MOVE_X" && <MOVE_X onChange={(props) => handleInputChange(sprite.id, i, props)} />}
-                              {block.type === "MOVE_Y" && <MOVE_Y onChange={(props) => handleInputChange(sprite.id, i, props)} />}
-                              {block.type === "GO_TO" && <MoveAtCoordinates onChange={(props) => handleInputChange(sprite.id, i, props)} />}
-                              {block.type === "TURN_DEGREES" && <RotateClockwise onChange={(props) => handleInputChange(sprite.id, i, props)} />}
-                              {block.type === "REPEAT" && <RepeatAction onChange={(props) => handleInputChange(sprite.id, i, props)} />}
-                              {block.type === "SAY" && <SayMessageForSeconds onChange={(props) => handleInputChange(sprite.id, i, props)} />}
-                              {block.type === "THINK" && <ThinkMessageForSeconds onChange={(props) => handleInputChange(sprite.id, i, props)} />}
+                              {block.type === "MOVE_X" && <MOVE_X onChange={(props) => handleInputChange(sprite.id, i, props)} handleDeleteButton={(e) => handleDeleteButton(e, sprite.id, block.id)} />}
+                              {block.type === "MOVE_Y" && <MOVE_Y onChange={(props) => handleInputChange(sprite.id, i, props)}  handleDeleteButton={(e) => handleDeleteButton(e, sprite.id, block.id)}/>}
+                              {block.type === "GO_TO" && <MoveAtCoordinates onChange={(props) => handleInputChange(sprite.id, i, props)}  handleDeleteButton={(e) => handleDeleteButton(e, sprite.id, block.id)}/>}
+                              {block.type === "TURN_DEGREES" && <RotateClockwise onChange={(props) => handleInputChange(sprite.id, i, props)}  handleDeleteButton={(e) => handleDeleteButton(e, sprite.id, block.id)}/>}
+                              {block.type === "REPEAT" && <RepeatAction onChange={(props) => handleInputChange(sprite.id, i, props)}  handleDeleteButton={(e) => handleDeleteButton(e, sprite.id, block.id)}/>}
+                              {block.type === "SAY" && <SayMessageForSeconds onChange={(props) => handleInputChange(sprite.id, i, props)}  handleDeleteButton={(e) => handleDeleteButton(e, sprite.id, block.id)}/>}
+                              {block.type === "THINK" && <ThinkMessageForSeconds onChange={(props) => handleInputChange(sprite.id, i, props)}  handleDeleteButton={(e) => handleDeleteButton(e, sprite.id, block.id)}/>}
                             </li>
                           );
                         })}
